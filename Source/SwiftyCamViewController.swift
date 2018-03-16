@@ -103,7 +103,15 @@ open class SwiftyCamViewController: UIViewController {
 
 	/// Sets whether flash is enabled for photo and video capture
 
-	public var flashEnabled                      = false
+	public var flashMode                      = AVCaptureFlashMode.off
+
+	/// Gets whether flash is enabled for photo and video capture
+	public var flashEnabled: Bool {
+		switch flashMode {
+			case .on, .auto: return true
+			default: return false
+		}
+	}
 
 	/// Sets whether Pinch to Zoom is enabled for the capture session
 
@@ -425,7 +433,7 @@ open class SwiftyCamViewController: UIViewController {
 		}
 
 		if device.hasFlash == true && flashEnabled == true /* TODO: Add Support for Retina Flash and add front flash */ {
-			changeFlashSettings(device: device, mode: .on)
+			changeFlashSettings(device: device, mode: self.flashMode)
 			capturePhotoAsyncronously(completionHandler: { (_) in })
 
 		} else if device.hasFlash == false && flashEnabled == true && currentCamera == .front {
